@@ -30,7 +30,7 @@ func SentryClient(address string, tlsPath string) (*grpc.ClientConn,
 			"Connection with node %s", address)
 	}
 
-	client := sentry.NewSentryClient(conn)
+	client := sentry.NewClient(conn)
 	return conn, client, nil
 }
 
@@ -44,7 +44,7 @@ func SchedulerClient(address string) (*grpc.ClientConn, scheduler.Backend,
 			"Client Connection with node %s", address)
 	}
 
-	client := scheduler.NewSchedulerClient(conn)
+	client := scheduler.NewClient(conn)
 	return conn, client, nil
 }
 
@@ -72,7 +72,7 @@ func RegistryClient(address string) (*grpc.ClientConn,
 			"Client Connection with node %s", address)
 	}
 
-	client := registry.NewRegistryClient(conn)
+	client := registry.NewClient(conn)
 	return conn, client, nil
 }
 
@@ -85,7 +85,7 @@ func ConsensusClient(address string) (*grpc.ClientConn,
 			"with node %s", address)
 	}
 
-	client := consensus.NewConsensusClient(conn)
+	client := consensus.NewClient(conn)
 	return conn, client, nil
 }
 
@@ -97,7 +97,7 @@ func StakingClient(address string) (*grpc.ClientConn, staking.Backend, error) {
 			"with node %s", address)
 	}
 
-	client := staking.NewStakingClient(conn)
+	client := staking.NewClient(conn)
 	return conn, client, nil
 }
 
