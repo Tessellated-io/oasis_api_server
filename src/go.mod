@@ -18,7 +18,7 @@ require (
 	github.com/cometbft/cometbft v0.0.0-00010101000000-000000000000
 	github.com/gorilla/mux v1.8.0
 	github.com/mackerelio/go-osstat v0.2.6
-	github.com/oasisprotocol/oasis-core/go v0.2300.10
+	github.com/oasisprotocol/oasis-core/go v0.2300.11
 	github.com/prometheus/common v0.44.0
 	github.com/zenazn/goji v0.9.0
 	google.golang.org/grpc v1.59.0
