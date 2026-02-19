@@ -10,6 +10,8 @@ import (
 	lgr "github.com/SimplyVC/oasis_api_server/src/logger"
 	"github.com/SimplyVC/oasis_api_server/src/responses"
 	"github.com/SimplyVC/oasis_api_server/src/rpc"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	"github.com/cometbft/cometbft/types"
 	"github.com/oasisprotocol/oasis-core/go/common/cbor"
 	"github.com/oasisprotocol/oasis-core/go/common/crypto/signature"
 	consensus "github.com/oasisprotocol/oasis-core/go/consensus/api"
@@ -442,11 +444,27 @@ func GetBlockHeader(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Unmarshal
+	headerPb := cmtproto.Header{}
+	err = headerPb.Unmarshal(meta.Header)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("unable to unmarshal header"))
+		return
+	}
+	header, err := types.HeaderFromProto(&headerPb)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("unable to make header from proto header"))
+		return
+	}
+
 	// Responds with block header retrieved above
 	lgr.Info.Println("Request at /api/consensus/blockheader responding " +
 		"with Block Header!")
 	json.NewEncoder(w).Encode(responses.BlockHeaderResponse{
-		BlkHeader: meta.Header})
+		BlkHeader: &header,
+	})
 }
 
 // GetBlockLastCommit returns consensus block last commit at specific height
@@ -514,11 +532,28 @@ func GetBlockLastCommit(w http.ResponseWriter, r *http.Request) {
 			Error: "Failed to Unmarshal Block Metadata!"})
 		return
 	}
+
+	// Unmarshal
+	commitPb := cmtproto.Commit{}
+	err = commitPb.Unmarshal(meta.LastCommit)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("unable to unmarshal last commit"))
+		return
+	}
+	commit, err := types.CommitFromProto(&commitPb)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("unable to make last commit from last commit proto"))
+		return
+	}
+
 	// Responds with Block Last commit retrieved above
 	lgr.Info.Println("Request at /api/consensus/blocklastcommit " +
 		"responding with Block Last Commit!")
 	json.NewEncoder(w).Encode(responses.BlockLastCommitResponse{
-		BlkLastCommit: meta.LastCommit})
+		BlkLastCommit: commit,
+	})
 }
 
 // PublicKeyToAddress accepts a Consensus Public Key and respond with
