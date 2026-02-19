@@ -1,8 +1,8 @@
 module github.com/SimplyVC/oasis_api_server/src
 
-go 1.21
+go 1.23.0
 
-toolchain go1.21.4
+toolchain go1.24.11
 
 replace (
 	github.com/cometbft/cometbft => github.com/oasisprotocol/cometbft v0.37.2-oasis1
@@ -17,7 +17,7 @@ require (
 	github.com/claudetech/ini v0.0.0-20140910072410-73e6100d9d51
 	github.com/cometbft/cometbft v0.0.0-00010101000000-000000000000
 	github.com/gorilla/mux v1.8.0
-	github.com/mackerelio/go-osstat v0.1.0
+	github.com/mackerelio/go-osstat v0.2.6
 	github.com/oasisprotocol/oasis-core/go v0.2300.10
 	github.com/prometheus/common v0.44.0
 	github.com/zenazn/goji v0.9.0
@@ -91,7 +91,7 @@ require (
 	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
 	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230822172742-b8732ec3820d // indirect
 	google.golang.org/grpc/security/advancedtls v0.0.0-20221004221323-12db695f1648 // indirect
