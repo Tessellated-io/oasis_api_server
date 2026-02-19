@@ -353,6 +353,7 @@ func GetRegistryStateToGenesis(w http.ResponseWriter, r *http.Request) {
 
 // GetEntity returns information with regards to single entity
 func GetEntity(w http.ResponseWriter, r *http.Request) {
+	lgr.Info.Println("got request for url " + r.URL.String())
 
 	// Add header so that received knows they're receiving JSON
 	w.Header().Add("Content-Type", "application/json")
@@ -364,7 +365,7 @@ func GetEntity(w http.ResponseWriter, r *http.Request) {
 
 		// Stop code here no need to establish connection and reply
 		json.NewEncoder(w).Encode(responses.ErrorResponse{
-			Error: "Node name requested doesn't exist"})
+			Error: "Node name requested doesn't exist \"" + nodeName + "\""})
 		return
 	}
 
@@ -383,6 +384,7 @@ func GetEntity(w http.ResponseWriter, r *http.Request) {
 	// Create public key object and retrieve entity from query
 	var pubKey common_signature.PublicKey
 	entityID := r.URL.Query().Get("entity")
+	lgr.Info.Println("got entity id:" + entityID)
 	if len(entityID) == 0 {
 
 		// Stop code here no need to establish connection and reply
