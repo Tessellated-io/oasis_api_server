@@ -78,14 +78,14 @@ func RegistryClient(address string) (*grpc.ClientConn,
 
 // ConsensusClient - initiate new consensus client
 func ConsensusClient(address string) (*grpc.ClientConn,
-	consensus.ClientBackend, error) {
+	consensus.Services, error) {
 	conn, err := Connect(address)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to establish connection "+
 			"with node %s", address)
 	}
 
-	client := consensus.NewClient(conn)
+	client := consensus.NewServicesClient(conn)
 	return conn, client, nil
 }
 

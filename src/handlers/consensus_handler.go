@@ -18,17 +18,16 @@ import (
 )
 
 // loadConsensusClient loads consensus client and returns it
-func loadConsensusClient(socket string) (*grpc.ClientConn,
-	consensus.ClientBackend) {
+func loadConsensusClient(socket string) (*grpc.ClientConn, consensus.Backend, consensus.Services) {
 
 	// Attempt to load connection with consensus client
 	connection, consensusClient, err := rpc.ConsensusClient(socket)
 	if err != nil {
 		lgr.Error.Println("Failed to establish connection to consensus"+
 			" client : ", err)
-		return nil, nil
+		return nil, nil, nil
 	}
-	return connection, consensusClient
+	return connection, consensusClient.Core(), consensusClient
 }
 
 // GetConsensusStateToGenesis returns genesis state
@@ -62,7 +61,7 @@ func GetConsensusStateToGenesis(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, _ := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
@@ -125,7 +124,7 @@ func GetEpoch(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, cs := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
@@ -140,7 +139,7 @@ func GetEpoch(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return beacon backend object from consensus
-	beacon := co.Beacon()
+	beacon := cs.Beacon()
 
 	// Return Epoch at current block height
 	epoch, err := beacon.GetEpoch(context.Background(), height)
@@ -182,7 +181,7 @@ func PingNode(w http.ResponseWriter, r *http.Request) {
 	height := consensus.HeightLatest
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, _ := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
@@ -245,7 +244,7 @@ func GetBlock(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, _ := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
@@ -294,7 +293,7 @@ func GetStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, _ := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
@@ -343,7 +342,7 @@ func GetGenesisDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, _ := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
@@ -406,7 +405,7 @@ func GetBlockHeader(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, _ := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
@@ -480,7 +479,7 @@ func GetBlockLastCommit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, _ := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
@@ -588,7 +587,7 @@ func GetTransactions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to load connection with consensus client
-	connection, co := loadConsensusClient(socket)
+	connection, co, _ := loadConsensusClient(socket)
 
 	// Close connection once code underneath executes
 	defer connection.Close()
